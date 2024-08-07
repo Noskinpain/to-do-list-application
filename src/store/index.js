@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { todoReducer } from "./slices/todoSlice";
-import { addTodoReducer, toggler } from "./slices/addTodoSlice";
+import { todoReducer, toggler, deleteToggler, closeBox, updateTagValue, updateTodoValue} from "./slices/todoSlice";
+import { addTodoReducer } from "./slices/addTodoSlice";
 
 
 
@@ -11,4 +11,4 @@ import { addTodoReducer, toggler } from "./slices/addTodoSlice";
     }
 })
 
-export {store, toggler}
+export {store, toggler, deleteToggler, closeBox, updateTagValue, updateTodoValue}
