@@ -8,7 +8,7 @@ const todoSlice = createSlice({
         isBoxOpen: false,
         isDeleteBoxOpen: false,
         todoSearchValue: "",
-        tagsSearchValue: "",
+        todoTitle: ""
     },
     reducers: {
       toggler(state) {
@@ -23,12 +23,12 @@ const todoSlice = createSlice({
       updateTodoValue(state, action){
       state.todoSearchValue = action.payload
       },
-      updateTagValue(state, action){
-      state.tagsSearchValue = action.payload
-      }
+    updateTodoTitle(state, action){
+      state.todoTitle = action.payload
+    } 
     
     },
 })
 
-export const {toggler, deleteToggler, closeBox, updateTagValue, updateTodoValue} = todoSlice.actions
+export const {toggler, deleteToggler, closeBox, updateTodoValue, updateTodoTitle} = todoSlice.actions
 export const todoReducer = todoSlice.reducer

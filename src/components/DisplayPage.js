@@ -10,6 +10,11 @@ import {
   closeBox,
   updateTagValue,
   updateTodoValue,
+  toggleTagBox,
+  setSelectedColor,
+  UpdateTagTitle,
+  updateTodoTitle,
+  resetTag
 } from "../store";
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
@@ -22,13 +27,31 @@ const DisplayPage = () => {
 
   const isBoxOpen = useSelector((state) => state.todo.isBoxOpen);
   const todoValue = useSelector((state) => state.todo.todoSearchValue);
-  const tagValue = useSelector((state) => state.todo.tagsSearchValue);
+  const tagValue = useSelector((state) => state.tag.tagsSearchValue);
+  const selectedColor = useSelector((state) => state.tag.selectedColor);
+  const isTagBoxOpen = useSelector((state) => state.tag.isCreateTagBoxOpen);
+  const tagTitle = useSelector((state) => state.tag.tagTitle);
+  const todoTitle = useSelector((state) => state.todo.todoTitle);
+
+  const handleTagTitleUpdate = (e) => {
+    dispatch(UpdateTagTitle(e.target.value));
+  };
+  const handleTodoTitleUpdate = (e) => {
+    dispatch(updateTodoTitle(e.target.value));
+  };
+
+  const onColorChange = (e) => {
+    dispatch(setSelectedColor(e.target.value));
+  };
+  const handleTagBoxOpen = () => {
+    dispatch(toggleTagBox());
+  };
 
   const handleTodoChange = (e) => {
-    dispatch(updateTodoValue(e.target.value))
+    dispatch(updateTodoValue(e.target.value));
   };
   const handleTagChange = (e) => {
-    dispatch(updateTagValue(e.target.value))
+    dispatch(updateTagValue(e.target.value));
   };
 
   const handleClickOutside = (event) => {
@@ -56,10 +79,23 @@ const DisplayPage = () => {
   const handleDialogBoxToggle = () => {
     dispatch(deleteToggler());
   };
+  const resetTagForm = () => {
+    dispatch(resetTag());
+  };
 
   return (
     <div className="flex gap-10  px-10 py-5">
-      <SideBar tagValue={tagValue} handleChange={handleTagChange} />
+      <SideBar
+        tagValue={tagValue}
+        handleChange={handleTagChange}
+        toggleBox={isTagBoxOpen}
+        handleClick={handleTagBoxOpen}
+        selectedColor={selectedColor}
+        onChange={onColorChange}
+        tagTitle={tagTitle}
+        titleOnChange={handleTagTitleUpdate}
+        resetTagForm={resetTagForm}
+      />
       <div className="w-full ">
         <div className="flex justify-between items-center">
           <input
@@ -68,7 +104,8 @@ const DisplayPage = () => {
             type="text"
             placeholder="Search for todo's"
             className="outline-none w-96 placeholder:text-gray-600"
-          />{todoValue}
+          />
+
           <div className="flex gap-4">
             <div className="">
               <div
@@ -90,6 +127,8 @@ const DisplayPage = () => {
             <CreateTodoModal
               isBoxOpen={isBoxOpen}
               handleToogle={handleToogle}
+              title={todoTitle}
+              titleOnChange={handleTodoTitleUpdate}
             />
           </div>
         </div>

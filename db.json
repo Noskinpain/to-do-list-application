@@ -1,8 +1,54 @@
 {
   "tags": [
     {
-      "id": 1,
-      "tag": "school"
+      "id": "7b48",
+      "name": "academy",
+      "color": "red"
+    },
+    {
+      "id": "7279",
+      "name": "debate",
+      "color": "black"
+    },
+    {
+      "id": "0dbd",
+      "name": "dkd",
+      "color": "orange"
+    },
+    {
+      "id": "2a8d",
+      "name": "outing",
+      "color": "blue"
+    },
+    {
+      "id": "04dc",
+      "name": "class",
+      "color": "red"
+    },
+    {
+      "id": "9e7a",
+      "name": "class",
+      "color": "red"
+    },
+    {
+      "id": "6ec8",
+      "name": "clock",
+      "color": "blue"
+    },
+    {
+      "id": "4a78",
+      "name": "comunity",
+      "color": "black"
+    },
+    {
+      "id": "754a",
+      "name": "office",
+      "color": "green"
+    },
+    {
+      "id": "0fac",
+      "name": "sam\"s collections",
+      "color": "red"
     }
   ]
 }
