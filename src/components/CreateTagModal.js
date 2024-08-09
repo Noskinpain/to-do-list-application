@@ -17,6 +17,7 @@ const handleSubmit = (e) => {
     e.preventDefault()
     addTag({name:title, color:selectedColor})
     resetTagForm()
+    handleClick()
 }
     
   return (

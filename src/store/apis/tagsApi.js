@@ -8,6 +8,7 @@ const tagsApi = createApi({
   endpoints(builder) {
     return {
       addTag: builder.mutation({
+        invalidatesTags: ["Tag"],
         query: ({ name, color }) => {
           return {
             url: "/tags",
@@ -20,6 +21,7 @@ const tagsApi = createApi({
         },
       }),
       fetchTags: builder.query({
+        providesTags: ["Tag"],
         query: () => {
             return{
                 url: "/tags",

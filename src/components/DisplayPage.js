@@ -132,7 +132,7 @@ const DisplayPage = () => {
             />
           </div>
         </div>
-        <div className="flex  justify-center w-full">
+        <div className="flex justify-center w-full">
           <img
             className="w-[45rem] bg-center object-cover"
             src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127818.jpg?ga=GA1.1.295908696.1722924150&semt=sph"

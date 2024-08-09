@@ -29,11 +29,11 @@ const SideBar = ({
         <div  className="w-7 h-7 rounded-full opacity-60" style={{backgroundColor: tag.color}}>
         </div>
         <p>{tag.name}</p>
-        </div> ;
+        </div>
     });
   }
   return (
-    <div className="w-1/5 ">
+    <div className="w-1/5">
       <h1 className="text-3xl text-red-500 font-bold">Todo</h1>
       <input
         value={tagValue}
