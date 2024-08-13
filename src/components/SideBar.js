@@ -2,6 +2,8 @@ import React from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import CreateTagModal from "./CreateTagModal";
 import { useFetchTagsQuery } from "../store";
+import TagItem from "./TagItem";
+import Skeleton from "./Skeleton";
 
 const SideBar = ({
   tagValue,
@@ -15,21 +17,17 @@ const SideBar = ({
   resetTagForm,
 }) => {
   const { data, isLoading, error } = useFetchTagsQuery();
-  console.log(data);
+
   let content;
   if (isLoading) {
-    content = <div className="text-[10px]">Loading tags....</div>;
+    content = <Skeleton times={4} className="w-4/5 h-5"/>
   } else if (error) {
     content = (
       <div className="text-[10px] text-red-500">Error loading tags</div>
     );
   } else {
     content = data.map((tag) => {
-      return <div key={tag.id} className="flex gap-3">
-        <div  className="w-7 h-7 rounded-full opacity-60" style={{backgroundColor: tag.color}}>
-        </div>
-        <p>{tag.name}</p>
-        </div>
+      return <TagItem key={tag.id} tag = {tag} />
     });
   }
   return (
@@ -44,16 +42,16 @@ const SideBar = ({
       />
       {/* taglist will be showed here */}
 
-      <div className="flex flex-col gap-[10rem] mt-10">
-        <div className="flex flex-col gap-2">{content}</div>
+    
+        <div className="flex overflow-y-auto w-full h-[27rem] pr-3 flex-col gap-2 mt-10">{content}</div>
         <div
-          className="flex gap-2 items-center cursor-pointer w-fit"
+          className="flex gap-2 items-center cursor-pointer w-fit pt-4"
           onClick={handleClick}
         >
           <MdAddCircleOutline className="text-2xl" />
           <p className="text-gray-600">Add a new tag</p>
         </div>
-      </div>
+      
       <CreateTagModal
         toggleBox={toggleBox}
         handleClick={handleClick}

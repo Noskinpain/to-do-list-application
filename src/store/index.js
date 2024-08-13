@@ -6,6 +6,8 @@ import {
   closeBox,
   updateTodoValue,
   updateTodoTitle,
+ updateTodoDescription,
+ resetTodo
 } from "./slices/todoSlice";
 import {
   tagReducer,
@@ -17,15 +19,17 @@ import {
 } from "./slices/tagSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { tagsApi } from "./apis/tagsApi";
+import { todosApi } from "./apis/todosApi";
 
 const store = configureStore({
   reducer: {
     todo: todoReducer,
     tag: tagReducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
+    [todosApi.reducerPath]: todosApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(tagsApi.middleware);
+    return getDefaultMiddleware().concat(tagsApi.middleware).concat(todosApi.middleware)
   },
 });
 
@@ -43,5 +47,8 @@ export {
   UpdateTagTitle,
   updateTodoTitle,
   resetTag,
+  updateTodoDescription,
+  resetTodo
 };
-export { useAddTagMutation, useFetchTagsQuery } from "./apis/tagsApi";
+export { useAddTagMutation, useFetchTagsQuery, useDeleteTagsMutation } from "./apis/tagsApi";
+export {useAddTodoMutation, useFetchTodosQuery} from "./apis/todosApi"

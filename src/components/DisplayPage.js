@@ -14,7 +14,9 @@ import {
   setSelectedColor,
   UpdateTagTitle,
   updateTodoTitle,
-  resetTag
+  resetTag,
+  resetTodo,
+  updateTodoDescription,
 } from "../store";
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
@@ -32,6 +34,11 @@ const DisplayPage = () => {
   const isTagBoxOpen = useSelector((state) => state.tag.isCreateTagBoxOpen);
   const tagTitle = useSelector((state) => state.tag.tagTitle);
   const todoTitle = useSelector((state) => state.todo.todoTitle);
+  const todoDescription = useSelector((state) => state.todo.todoDescription);
+
+  const handleTodoDescriptionUpdate = (e) => {
+    dispatch(updateTodoDescription(e.target.value));
+  };
 
   const handleTagTitleUpdate = (e) => {
     dispatch(UpdateTagTitle(e.target.value));
@@ -82,6 +89,9 @@ const DisplayPage = () => {
   const resetTagForm = () => {
     dispatch(resetTag());
   };
+  const resetTodoForm = () => {
+    dispatch(resetTodo())
+  }
 
   return (
     <div className="flex gap-10  px-10 py-5">
@@ -129,6 +139,9 @@ const DisplayPage = () => {
               handleToogle={handleToogle}
               title={todoTitle}
               titleOnChange={handleTodoTitleUpdate}
+              description={todoDescription}
+              descriptionOnChange={handleTodoDescriptionUpdate}
+              resetTodoForm={resetTodoForm}
             />
           </div>
         </div>
