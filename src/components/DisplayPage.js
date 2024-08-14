@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SideBar from "./SideBar";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoMdAdd } from "react-icons/io";
@@ -21,8 +21,14 @@ import {
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
 import DeleteToggle from "./DeleteToggle";
+import { useFetchTodosQuery } from "../store";
+import Skeleton from "./Skeleton";
+import Todo from "./Todo";
 
 const DisplayPage = () => {
+  const { data, isLoading, error } = useFetchTodosQuery();
+  const [tagsToShow, setTagsToShow] = useState([])
+
   const dispatch = useDispatch();
   const boxRef = useRef(null);
   const iconRef = useRef(null);
@@ -90,8 +96,47 @@ const DisplayPage = () => {
     dispatch(resetTag());
   };
   const resetTodoForm = () => {
-    dispatch(resetTodo())
+    dispatch(resetTodo());
+  };
+
+  const handleDivClick = (tag) => {
+    if(tagsToShow.some((t) => t.id === tag.id)){
+      setTagsToShow((prev) => prev.filter((t) => t.id !== tag.id))
+    }
+    else{
+      setTagsToShow((prev) => [...prev, tag])
+    }
+  
   }
+  
+ 
+let content;
+    if (data && data.length === 0) {
+      content = <>
+       <div className="flex justify-center w-full">
+          <img
+            className="w-[45rem] bg-center object-cover"
+            src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127818.jpg?ga=GA1.1.295908696.1722924150&semt=sph"
+            alt="empty-todolist-img"
+          />
+        </div>
+        <h3 className="text-center text-2xl">
+          It seems you don't have anything to do
+        </h3></>
+    } else if(isLoading){
+      content = <Skeleton className="mt-5 w-full h-16" times={4} />
+    } else if(error){
+       content = <div>Error displaying todos</div>
+    } else{
+      content = (
+        <div className="flex flex-wrap mt-10 gap-10">
+          {data.map((todo) => (
+            <Todo key={todo.id} todo={todo} />
+          ))}
+        </div>
+      );
+    }
+  
 
   return (
     <div className="flex gap-10  px-10 py-5">
@@ -105,6 +150,9 @@ const DisplayPage = () => {
         tagTitle={tagTitle}
         titleOnChange={handleTagTitleUpdate}
         resetTagForm={resetTagForm}
+        handleDivClick = {handleDivClick}
+        
+        tagsToShow = {tagsToShow}
       />
       <div className="w-full ">
         <div className="flex justify-between items-center">
@@ -145,16 +193,7 @@ const DisplayPage = () => {
             />
           </div>
         </div>
-        <div className="flex justify-center w-full">
-          <img
-            className="w-[45rem] bg-center object-cover"
-            src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127818.jpg?ga=GA1.1.295908696.1722924150&semt=sph"
-            alt="empty-todolist-img"
-          />
-        </div>
-        <h3 className="text-center text-2xl">
-          It seems you don't have anything to do
-        </h3>
+       {content}
       </div>
     </div>
   );

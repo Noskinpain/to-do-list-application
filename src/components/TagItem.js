@@ -1,14 +1,17 @@
 import { GoTrash } from "react-icons/go";
 import { useDeleteTagsMutation, useFetchTodosQuery } from "../store";
+import { useState } from "react";
 
-const TagItem = ({ tag }) => {
+const TagItem = ({ tag, handleDivClick, tagsToShow }) => {
   const [deleteTag] = useDeleteTagsMutation();
   const {data, isLoading, error} = useFetchTodosQuery()
+ 
   
 
   const handleDeleteTag = () => {
     deleteTag(tag);
   };
+
  
 
   let tagCount
@@ -24,9 +27,9 @@ const TagItem = ({ tag }) => {
   
     // console.log(`Tag "${tag.name}" appears ${tagCount} times.`);
   }
-
+ const isClicked = tagsToShow.some((t) => t.id === tag.id)
   return (
-    <div className="flex justify-between items-center">
+    <div onClick={() => handleDivClick(tag)} className={`${isClicked? "bg-[#FFF9DE] h-12 px-2 rounded-lg flex justify-between items-center" : "flex justify-between items-center "} cursor-pointer`}>
       <div className="flex gap-3">
         <div
           className="w-7 h-7 rounded-full opacity-60"

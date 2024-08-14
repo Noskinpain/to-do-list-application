@@ -9,19 +9,22 @@ const todosApi = createApi({
     endpoints(builder){
         return{
             addTodo: builder.mutation({
-            query: ({title, description, selectedTags}) => {
+                invalidatesTags: [{type: "Todos"}],
+            query: ({title, description, selectedTags, createdAt}) => {
                 return{
                     url: "/todos",
                     method: "POST",
                     body: {
                        title,
                        description,
-                       selectedTags
+                       selectedTags,
+                       createdAt
                     }
                 }
             }
             }),
             fetchTodos: builder.query({
+                providesTags: [{type: "Todos"}],
                 query: () => {
                     return{
                         url: "/todos",
