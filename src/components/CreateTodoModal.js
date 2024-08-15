@@ -1,7 +1,8 @@
 import { useFetchTagsQuery } from "../store";
 import Skeleton from "./Skeleton";
 import { useAddTodoMutation } from "../store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 const CreateTodoModal = ({
   isBoxOpen,
@@ -11,15 +12,17 @@ const CreateTodoModal = ({
   description,
   descriptionOnChange,
   resetTodoForm,
+  selectedTodo,
+  isEdit,
+  handleIsEditClose
 }) => {
   const { data, isLoading, error } = useFetchTagsQuery();
   const [selectedTags, setSelectedTags] = useState([]);
   const [addTodo] = useAddTodoMutation();
 
-  // // Log selectedTags whenever it changes
-  // useEffect(() => {
-  //   console.log("Selected Tags:", selectedTags);
-  // }, [selectedTags]);
+
+  
+
 
   const handleAddTodo = (e) => {
     e.preventDefault();
@@ -91,7 +94,7 @@ const CreateTodoModal = ({
                   Exit
                 </p>
                 <button className="bg-slate-800 text-white w-20 h-7 rounded-lg">
-                  Add
+                   {isEdit ? "Edit" : "Add"}
                 </button>
               </div>
               <h1 className="mt-4 text-xl">Title</h1>

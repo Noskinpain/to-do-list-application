@@ -1,6 +1,38 @@
 import { BsThreeDots } from "react-icons/bs";
+import { useState, useEffect, useRef } from "react";
+import { useDeleteTodoMutation } from "../store";
 
-const Todo = ({ todo }) => {
+const Todo = ({ todo, handleOpenTodoEdit}) => {
+ 
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [deleteTodo] = useDeleteTodoMutation();
+  
+  
+  const dialogRef = useRef(null)
+
+
+
+  const handleDeleteTodo = (todo) => {
+    deleteTodo(todo.id)
+  }
+
+  const handleClickOutside = (event) => {
+     if(dialogRef.current && !dialogRef.current.contains(event.target)){
+      setIsDialogOpen(false)
+     }
+  }
+
+  useEffect(() => {
+    if(isDialogOpen){
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isDialogOpen])
   const tags = todo.selectedTags.map((tag) => {
     return (
       <div
@@ -17,9 +49,22 @@ const Todo = ({ todo }) => {
     <div className="w-[30rem] bg-[#FFF9DE] text-gray-700 px-3 py-4">
       <div className="flex justify-between items-center flex-row">
         <p className=" font-bold text-lg capitalize">{todo.title}</p>
-        <BsThreeDots className="text-lg" />
+        <div>
+          <BsThreeDots
+            className="text-lg cursor-pointer"
+            onClick={() => setIsDialogOpen(!isDialogOpen)}
+          />
+          {isDialogOpen ? (
+            <div ref={dialogRef} className="absolute w-16 h-fit py-2 shadow-lg bg-white pl-2">
+              <p className="cursor-pointer" onClick={() => handleOpenTodoEdit(todo)}>Edit</p>
+              <p className="mt-1 cursor-pointer" onClick={() => handleDeleteTodo(todo)}>Delete</p>
+            </div>
+          ) : null}
+        </div>
       </div>
-      <p className="text-[11px]">{formattedDate} - {formattedTime}</p>
+      <p className="text-[11px]">
+        {formattedDate} - {formattedTime}
+      </p>
       <p className="text-[15px] font-[600]">{todo.description}</p>
       <div className="flex justify-between items-center flex-row pt-10">
         <div className="flex items-center gap-1">{tags}</div>

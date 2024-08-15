@@ -21,13 +21,17 @@ import {
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
 import DeleteToggle from "./DeleteToggle";
-import { useFetchTodosQuery } from "../store";
+import { useFetchTodosQuery, useUpdateTodoMutation } from "../store";
 import Skeleton from "./Skeleton";
 import Todo from "./Todo";
 
 const DisplayPage = () => {
   const { data, isLoading, error } = useFetchTodosQuery();
-  const [tagsToShow, setTagsToShow] = useState([])
+  const [tagsToShow, setTagsToShow] = useState([]);
+  const [selectedTodo, setSelectedTodo] = useState(null);
+  const [isEdit, setIsEdit] = useState(true);
+  const [updateTodo, { loading = isLoading, isError, isSuccess }] =
+    useUpdateTodoMutation();
 
   const dispatch = useDispatch();
   const boxRef = useRef(null);
@@ -76,6 +80,7 @@ const DisplayPage = () => {
       dispatch(closeBox());
     }
   };
+ 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -100,20 +105,45 @@ const DisplayPage = () => {
   };
 
   const handleDivClick = (tag) => {
-    if(tagsToShow.some((t) => t.id === tag.id)){
-      setTagsToShow((prev) => prev.filter((t) => t.id !== tag.id))
+    if (tagsToShow.some((t) => t.id === tag.id)) {
+      setTagsToShow((prev) => prev.filter((t) => t.id !== tag.id));
+    } else {
+      setTagsToShow((prev) => [...prev, tag]);
     }
-    else{
-      setTagsToShow((prev) => [...prev, tag])
-    }
-  
+  };
+
+  const handleOpenTodoEdit = (todo) => {
+    setSelectedTodo(todo); // Set the selected todo
+    dispatch(updateTodoTitle(todo.title)); // Pre-fill the title
+    dispatch(updateTodoDescription(todo.description)); // Pre-fill the description
+    // Pre-fill the selected tags (if necessary)
+    // dispatch(someActionToPreFillTags(todo.selectedTags));
+    dispatch(toggler()); // Open the modal
+   
+   
+  };
+  const handleIsEditOpen = () => {
+    setIsEdit(true)
   }
+   const handleIsEditClose = () => {
+  setIsEdit(false)
+}
   
- 
-let content;
-    if (data && data.length === 0) {
-      content = <>
-       <div className="flex justify-center w-full">
+  let filteredTodos = data;
+
+  if (tagsToShow.length > 0) {
+    filteredTodos = data.filter((todo) =>
+      todo.selectedTags.some((tag) =>
+        tagsToShow.some((selectedTag) => selectedTag.id === tag.id)
+      )
+    );
+  }
+
+  let content;
+  if (data && data.length === 0) {
+    content = (
+      <>
+        <div className="flex justify-center w-full">
           <img
             className="w-[45rem] bg-center object-cover"
             src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127818.jpg?ga=GA1.1.295908696.1722924150&semt=sph"
@@ -122,21 +152,27 @@ let content;
         </div>
         <h3 className="text-center text-2xl">
           It seems you don't have anything to do
-        </h3></>
-    } else if(isLoading){
-      content = <Skeleton className="mt-5 w-full h-16" times={4} />
-    } else if(error){
-       content = <div>Error displaying todos</div>
-    } else{
-      content = (
-        <div className="flex flex-wrap mt-10 gap-10">
-          {data.map((todo) => (
-            <Todo key={todo.id} todo={todo} />
-          ))}
-        </div>
-      );
-    }
-  
+        </h3>
+      </>
+    );
+  } else if (isLoading) {
+    content = <Skeleton className="mt-5 w-full h-16" times={4} />;
+  } else if (error) {
+    content = <div>Error displaying todos</div>;
+  } else {
+    content = (
+      <div className="flex flex-wrap mt-10 gap-10">
+        {filteredTodos.map((todo) => (
+          <Todo
+            key={todo.id}
+            todo={todo}
+            handleOpenTodoEdit={handleOpenTodoEdit}
+           handleIsEditOpen={handleIsEditOpen}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-10  px-10 py-5">
@@ -150,9 +186,8 @@ let content;
         tagTitle={tagTitle}
         titleOnChange={handleTagTitleUpdate}
         resetTagForm={resetTagForm}
-        handleDivClick = {handleDivClick}
-        
-        tagsToShow = {tagsToShow}
+        handleDivClick={handleDivClick}
+        tagsToShow={tagsToShow}
       />
       <div className="w-full ">
         <div className="flex justify-between items-center">
@@ -190,10 +225,13 @@ let content;
               description={todoDescription}
               descriptionOnChange={handleTodoDescriptionUpdate}
               resetTodoForm={resetTodoForm}
+              selectedTodo={selectedTodo}
+              handleIsEditClose={handleIsEditClose}
+              isEdit={isEdit}
             />
           </div>
         </div>
-       {content}
+        {content}
       </div>
     </div>
   );

@@ -6,8 +6,8 @@ import {
   closeBox,
   updateTodoValue,
   updateTodoTitle,
- updateTodoDescription,
- resetTodo
+  updateTodoDescription,
+  resetTodo,
 } from "./slices/todoSlice";
 import {
   tagReducer,
@@ -29,7 +29,9 @@ const store = configureStore({
     [todosApi.reducerPath]: todosApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(tagsApi.middleware).concat(todosApi.middleware)
+    return getDefaultMiddleware()
+      .concat(tagsApi.middleware)
+      .concat(todosApi.middleware);
   },
 });
 
@@ -48,7 +50,17 @@ export {
   updateTodoTitle,
   resetTag,
   updateTodoDescription,
-  resetTodo
+  resetTodo,
 };
-export { useAddTagMutation, useFetchTagsQuery, useDeleteTagsMutation } from "./apis/tagsApi";
-export {useAddTodoMutation, useFetchTodosQuery} from "./apis/todosApi"
+export {
+  useAddTagMutation,
+  useFetchTagsQuery,
+  useDeleteTagsMutation,
+} from "./apis/tagsApi";
+export {
+  useAddTodoMutation,
+  useFetchTodosQuery,
+  useDeleteTodoMutation,
+  useDeleteAllTodosMutation,
+  useUpdateTodoMutation,
+} from "./apis/todosApi";
