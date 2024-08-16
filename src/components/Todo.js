@@ -11,7 +11,7 @@ const Todo = ({ todo, handleOpenTodoEdit}) => {
   const dialogRef = useRef(null)
 
 
-
+  // 
   const handleDeleteTodo = (todo) => {
     deleteTodo(todo.id)
   }
@@ -20,6 +20,10 @@ const Todo = ({ todo, handleOpenTodoEdit}) => {
      if(dialogRef.current && !dialogRef.current.contains(event.target)){
       setIsDialogOpen(false)
      }
+  }
+
+  const handleEditFunctions = () => {
+    handleOpenTodoEdit(todo)
   }
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const Todo = ({ todo, handleOpenTodoEdit}) => {
           />
           {isDialogOpen ? (
             <div ref={dialogRef} className="absolute w-16 h-fit py-2 shadow-lg bg-white pl-2">
-              <p className="cursor-pointer" onClick={() => handleOpenTodoEdit(todo)}>Edit</p>
+              <p className="cursor-pointer" onClick={handleEditFunctions}>Edit</p>
               <p className="mt-1 cursor-pointer" onClick={() => handleDeleteTodo(todo)}>Delete</p>
             </div>
           ) : null}

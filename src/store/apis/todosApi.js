@@ -38,6 +38,7 @@ const todosApi = createApi({
             method: "DELETE",
           };
         },
+        invalidatesTags: [{ type: "Todos" }],
       }),
       deleteAllTodos: builder.mutation({
         queryFn: async (_arg, _queryApi, _extraOptions, baseQuery) => {
@@ -67,20 +68,14 @@ const todosApi = createApi({
         invalidatesTags: [{ type: "Todos" }],
       }),
       updateTodo: builder.mutation({
-        query: ({ id, title, description, selectedTags, createdAt }) => {
-          return {
-            url: `/todo/${id}`,
-            method: "PATCH",
-            body: {
-              title,
-              description,
-              selectedTags,
-              createdAt,
-            },
-          };
-        },
-        invalidatesTags: [{ type: "Todos" }],
+        query: ({ id, ...updatedTodo }) => ({
+          url: `/todos/${id}`,
+          method: 'PATCH', // or 'PATCH' depending on your needs
+          body: updatedTodo,
+        }),
+        invalidatesTags: [{ type: 'Todos' }],
       }),
+      
     };
   },
 });

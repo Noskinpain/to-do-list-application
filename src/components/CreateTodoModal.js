@@ -1,8 +1,6 @@
 import { useFetchTagsQuery } from "../store";
 import Skeleton from "./Skeleton";
-import { useAddTodoMutation } from "../store";
-import { useState, useEffect } from "react";
-
+import { useAddTodoMutation, useUpdateTodoMutation } from "../store";
 
 const CreateTodoModal = ({
   isBoxOpen,
@@ -12,39 +10,53 @@ const CreateTodoModal = ({
   description,
   descriptionOnChange,
   resetTodoForm,
-  selectedTodo,
+  selectedTags,
   isEdit,
-  handleIsEditClose
+  clear,
+  remove,
+  add,
+  todo,
 }) => {
   const { data, isLoading, error } = useFetchTagsQuery();
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [updateTodo] =
+    useUpdateTodoMutation();
   const [addTodo] = useAddTodoMutation();
 
-
-  
-
-
-  const handleAddTodo = (e) => {
+  const handleAddTodo = async (e) => {
     e.preventDefault();
-    addTodo({
-      title,
-      description,
-      selectedTags,
-      createdAt: new Date().toISOString(),
-    });
-    resetTodoForm();
-    handleToogle();
-    setSelectedTags([]); // Clear selected tags after submitting
+
+    try {
+      if (isEdit && todo) {
+        await updateTodo({
+          id: todo.id, // Passing the ID here
+          title,
+          description,
+          selectedTags,
+        }).unwrap();
+        console.log('Todo updated successfully');
+      } else {
+        await addTodo({
+          title,
+          description,
+          selectedTags,
+          createdAt: new Date().toISOString(),
+        }).unwrap();
+        console.log('Todo added successfully');
+      }
+      
+      resetTodoForm();
+      handleToogle();
+      clear(); // Clear selected tags after submitting
+    } catch (error) {
+      console.error('Failed to save todo:', error);
+    }
   };
 
   const handleTagSelection = (tag) => {
-    // Check if the tag is already selected
     if (selectedTags.some((t) => t.id === tag.id)) {
-      // Remove the tag from selectedTags if it's already selected
-      setSelectedTags((prevTags) => prevTags.filter((t) => t.id !== tag.id));
+      remove(tag);
     } else {
-      // Add the tag to selectedTags if it's not selected
-      setSelectedTags((prevTags) => [...prevTags, tag]);
+      add(tag);
     }
   };
 
@@ -94,7 +106,7 @@ const CreateTodoModal = ({
                   Exit
                 </p>
                 <button className="bg-slate-800 text-white w-20 h-7 rounded-lg">
-                   {isEdit ? "Edit" : "Add"}
+                  {isEdit ? "Edit" : "Add"}
                 </button>
               </div>
               <h1 className="mt-4 text-xl">Title</h1>
@@ -112,7 +124,7 @@ const CreateTodoModal = ({
                 type="text"
                 value={description}
                 onChange={descriptionOnChange}
-                placeholder="add a discription..."
+                placeholder="add a description..."
                 className="w-full px-3 mt-2 h-24 pt-1 rounded-lg outline-none bg-gray-100"
               />
 

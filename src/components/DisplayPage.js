@@ -21,17 +21,17 @@ import {
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
 import DeleteToggle from "./DeleteToggle";
-import { useFetchTodosQuery, useUpdateTodoMutation } from "../store";
+import { useFetchTodosQuery} from "../store";
 import Skeleton from "./Skeleton";
 import Todo from "./Todo";
 
 const DisplayPage = () => {
   const { data, isLoading, error } = useFetchTodosQuery();
   const [tagsToShow, setTagsToShow] = useState([]);
-  const [selectedTodo, setSelectedTodo] = useState(null);
-  const [isEdit, setIsEdit] = useState(true);
-  const [updateTodo, { loading = isLoading, isError, isSuccess }] =
-    useUpdateTodoMutation();
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [todos, setTodos] = useState({});
+
 
   const dispatch = useDispatch();
   const boxRef = useRef(null);
@@ -80,7 +80,7 @@ const DisplayPage = () => {
       dispatch(closeBox());
     }
   };
- 
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -90,6 +90,9 @@ const DisplayPage = () => {
 
   const handleToogle = () => {
     dispatch(toggler());
+    setIsEdit(false);
+    dispatch(resetTodo());
+    setSelectedTags([]);
   };
 
   const isDeleteBoxOpen = useSelector((state) => state.todo.isDeleteBoxOpen);
@@ -113,22 +116,26 @@ const DisplayPage = () => {
   };
 
   const handleOpenTodoEdit = (todo) => {
-    setSelectedTodo(todo); // Set the selected todo
+    setTodos(todo); // Store the selected todo in state
     dispatch(updateTodoTitle(todo.title)); // Pre-fill the title
     dispatch(updateTodoDescription(todo.description)); // Pre-fill the description
-    // Pre-fill the selected tags (if necessary)
-    // dispatch(someActionToPreFillTags(todo.selectedTags));
+    setSelectedTags(todo.selectedTags); // Pre-fill the selected tags
+    setIsEdit(true);
     dispatch(toggler()); // Open the modal
-   
-   
+
+
   };
-  const handleIsEditOpen = () => {
-    setIsEdit(true)
-  }
-   const handleIsEditClose = () => {
-  setIsEdit(false)
-}
   
+  const clearSelectedTags = () => {
+    setSelectedTags([]);
+  };
+  const removeSelectedTag = (tag) => {
+    setSelectedTags((prevTags) => prevTags.filter((t) => t.id !== tag.id));
+  };
+  const addSelectedTags = (tag) => {
+    setSelectedTags((prevTags) => [...prevTags, tag]);
+  };
+
   let filteredTodos = data;
 
   if (tagsToShow.length > 0) {
@@ -167,7 +174,6 @@ const DisplayPage = () => {
             key={todo.id}
             todo={todo}
             handleOpenTodoEdit={handleOpenTodoEdit}
-           handleIsEditOpen={handleIsEditOpen}
           />
         ))}
       </div>
@@ -225,9 +231,12 @@ const DisplayPage = () => {
               description={todoDescription}
               descriptionOnChange={handleTodoDescriptionUpdate}
               resetTodoForm={resetTodoForm}
-              selectedTodo={selectedTodo}
-              handleIsEditClose={handleIsEditClose}
+              selectedTags={selectedTags}
               isEdit={isEdit}
+              clear={clearSelectedTags}
+              remove={removeSelectedTag}
+              add={addSelectedTags}
+              todo={todos}
             />
           </div>
         </div>

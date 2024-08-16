@@ -1,7 +1,7 @@
 import { useDeleteAllTodosMutation } from "../store";
 
 const DeleteToggle = ({ isDeleteBoxOpen, boxRef }) => {
-  const [deleteAllTodos, { isLoading, isError, isSuccess }] =
+  const [deleteAllTodos, { isLoading }] =
     useDeleteAllTodosMutation();
 
   const handleDeleteAll = async () => {

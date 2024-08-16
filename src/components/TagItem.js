@@ -1,6 +1,6 @@
 import { GoTrash } from "react-icons/go";
 import { useDeleteTagsMutation, useFetchTodosQuery } from "../store";
-import { useState } from "react";
+
 
 const TagItem = ({ tag, handleDivClick, tagsToShow }) => {
   const [deleteTag] = useDeleteTagsMutation();
