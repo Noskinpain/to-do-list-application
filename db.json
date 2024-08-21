@@ -14,6 +14,21 @@
       "id": "8e22",
       "name": "work",
       "color": "blue"
+    },
+    {
+      "id": "d68b",
+      "name": "search",
+      "color": "pink"
+    },
+    {
+      "id": "fe54",
+      "name": "responsive",
+      "color": "purple"
+    },
+    {
+      "id": "dd04",
+      "name": "done",
+      "color": "red"
     }
   ],
   "todos": [
@@ -31,6 +46,11 @@
           "id": "f254",
           "name": "occasion",
           "color": "green"
+        },
+        {
+          "id": "2183",
+          "name": "school",
+          "color": "red"
         }
       ],
       "createdAt": "2024-08-15T13:37:38.159Z"
@@ -41,9 +61,9 @@
       "description": "i should be able to finish this implementation today",
       "selectedTags": [
         {
-          "id": "8e22",
-          "name": "work",
-          "color": "blue"
+          "id": "d68b",
+          "name": "search",
+          "color": "pink"
         }
       ],
       "createdAt": "2024-08-16T15:06:27.309Z"
@@ -54,9 +74,9 @@
       "description": "work on the radio button to signify done todos",
       "selectedTags": [
         {
-          "id": "8e22",
-          "name": "work",
-          "color": "blue"
+          "id": "dd04",
+          "name": "done",
+          "color": "red"
         }
       ],
       "createdAt": "2024-08-17T05:37:10.791Z"
@@ -67,9 +87,9 @@
       "description": "work o showing done todos from the buton",
       "selectedTags": [
         {
-          "id": "8e22",
-          "name": "work",
-          "color": "blue"
+          "id": "dd04",
+          "name": "done",
+          "color": "red"
         }
       ],
       "createdAt": "2024-08-17T05:37:51.496Z"
@@ -80,14 +100,9 @@
       "description": "site should be responsive",
       "selectedTags": [
         {
-          "id": "f254",
-          "name": "occasion",
-          "color": "green"
-        },
-        {
-          "id": "8e22",
-          "name": "work",
-          "color": "blue"
+          "id": "fe54",
+          "name": "responsive",
+          "color": "purple"
         }
       ],
       "createdAt": "2024-08-17T05:38:16.625Z"
