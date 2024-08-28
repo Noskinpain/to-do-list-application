@@ -17,6 +17,7 @@ import {
   resetTag,
   resetTodo,
   updateTodoDescription,
+
 } from "../store";
 import { useSelector } from "react-redux";
 import CreateTodoModal from "./CreateTodoModal";
@@ -31,6 +32,9 @@ const DisplayPage = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [todos, setTodos] = useState({});
+  const [doneTodos, setDoneTodos] = useState([])
+  const [hideDoneTodos, setHideDoneTodos] = useState(false);
+
 
 
   const dispatch = useDispatch();
@@ -45,6 +49,7 @@ const DisplayPage = () => {
   const tagTitle = useSelector((state) => state.tag.tagTitle);
   const todoTitle = useSelector((state) => state.todo.todoTitle);
   const todoDescription = useSelector((state) => state.todo.todoDescription);
+
 
   const handleTodoDescriptionUpdate = (e) => {
     dispatch(updateTodoDescription(e.target.value));
@@ -146,6 +151,40 @@ const DisplayPage = () => {
     );
   }
 
+  //implementing done todos
+  const handleDoneTodos = (todo) => {
+  setDoneTodos((prevDoneTodos) => {
+    // Check if the todo already exists in the array
+    const todoExists = prevDoneTodos.some((doneTodo) => doneTodo.id === todo.id);
+    
+    // If it doesn't exist, add it to the array
+    if (!todoExists) {
+      return [...prevDoneTodos, todo];
+    }
+    
+    // If it exists, return the array as is
+    return prevDoneTodos;
+  });
+};
+//remove todos from donetodo list when unchecked
+const removeTodo = (todoId) => {
+  setDoneTodos((prevDoneTodos) => {
+    return prevDoneTodos.filter((doneTodo) => doneTodo.id !== todoId);
+  });
+};
+
+//toggle hideDoneTodo visibility
+const toggleHideDoneTodos = () => {
+  setHideDoneTodos((prevHide) => !prevHide);
+
+};
+
+
+
+  useEffect(() => {
+    console.log(doneTodos)
+  }, [doneTodos])
+
   let content;
   if (data && data.length === 0) {
     content = (
@@ -169,11 +208,19 @@ const DisplayPage = () => {
   } else {
     content = (
       <div className="flex flex-wrap mt-10 gap-10">
-        {filteredTodos.map((todo) => (
+    {filteredTodos
+        .filter((todo) => {
+          const matchesSearch = todo.title.toLowerCase().includes(todoValue.toLowerCase());
+          const isDoneTodo = doneTodos.some((doneTodo) => doneTodo.id === todo.id);
+          return matchesSearch && (!hideDoneTodos || !isDoneTodo);
+        })
+        .map((todo) => (
           <Todo
             key={todo.id}
             todo={todo}
             handleOpenTodoEdit={handleOpenTodoEdit}
+            handleDoneTodos={handleDoneTodos}
+            removeTodo={removeTodo}
           />
         ))}
       </div>
@@ -181,7 +228,7 @@ const DisplayPage = () => {
   }
 
   return (
-    <div className="flex gap-10  px-10 py-5">
+    <div className="md:flex gap-10 px-10 py-5">
       <SideBar
         tagValue={tagValue}
         handleChange={handleTagChange}
@@ -194,6 +241,8 @@ const DisplayPage = () => {
         resetTagForm={resetTagForm}
         handleDivClick={handleDivClick}
         tagsToShow={tagsToShow}
+        toggleHideDoneTodos={toggleHideDoneTodos}
+        hideDoneTodos={hideDoneTodos}
       />
       <div className="w-full ">
         <div className="flex justify-between items-center">

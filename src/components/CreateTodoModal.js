@@ -71,7 +71,7 @@ const CreateTodoModal = ({
       return (
         <div
           key={tag.id}
-          className="flex gap-1 items-center cursor-pointer"
+          className="flex gap-1 items-center cursor-pointer w-fit"
           onClick={() => handleTagSelection(tag)}
         >
           <div
@@ -91,7 +91,7 @@ const CreateTodoModal = ({
       {isBoxOpen && (
         <div
           onClick={handleToogle}
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10"
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center  items-center z-10"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -136,7 +136,7 @@ const CreateTodoModal = ({
                   className="h-8 w-48 outline-none"
                 />
               </div>
-              <div className="flex gap-4 mt-2">{content}</div>
+              <div className="flex gap-4 mt-2 ">{content}</div>
             </form>
           </div>
         </div>

@@ -33,29 +33,6 @@
   ],
   "todos": [
     {
-      "id": "ad07",
-      "title": "edit todos done",
-      "description": "i want to be able to edit all todos in the list of todos and update them accordingly.",
-      "selectedTags": [
-        {
-          "id": "8e22",
-          "name": "work",
-          "color": "blue"
-        },
-        {
-          "id": "f254",
-          "name": "occasion",
-          "color": "green"
-        },
-        {
-          "id": "2183",
-          "name": "school",
-          "color": "red"
-        }
-      ],
-      "createdAt": "2024-08-15T13:37:38.159Z"
-    },
-    {
       "id": "7cc6",
       "title": "add search functionalities to todo and tags",
       "description": "i should be able to finish this implementation today",
@@ -84,7 +61,7 @@
     {
       "id": "ab1e",
       "title": "implementing done todos",
-      "description": "work o showing done todos from the buton",
+      "description": "work on showing done todos from the button",
       "selectedTags": [
         {
           "id": "dd04",

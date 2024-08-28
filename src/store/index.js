@@ -15,7 +15,7 @@ import {
   toggleTagBox,
   setSelectedColor,
   UpdateTagTitle,
-  resetTag,
+  resetTag
 } from "./slices/tagSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { tagsApi } from "./apis/tagsApi";

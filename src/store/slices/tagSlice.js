@@ -7,7 +7,7 @@ const tagSlice = createSlice({
    tagsSearchValue: "",
    isCreateTagBoxOpen: false,
    selectedColor: "",
-   tagTitle: ""
+   tagTitle: "",
   },
   reducers: {
     updateTagValue(state, action){
@@ -25,7 +25,8 @@ const tagSlice = createSlice({
     resetTag(state){
       state.tagTitle = ""
       state.selectedColor = ""
-    }
+    },
+  
   }
 });
 

@@ -2,7 +2,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useState, useEffect, useRef } from "react";
 import { useDeleteTodoMutation } from "../store";
 
-const Todo = ({ todo, handleOpenTodoEdit }) => {
+const Todo = ({ todo, handleOpenTodoEdit, handleDoneTodos, removeTodo }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteTodo] = useDeleteTodoMutation();
   const [toggleInput, setToggleInput] = useState(false);
@@ -14,8 +14,15 @@ const Todo = ({ todo, handleOpenTodoEdit }) => {
     deleteTodo(todo.id);
   };
 
+  //remove seleted todos from here
   const handleToggleInput = (todo) => {
     setToggleInput(!toggleInput);
+    if(!toggleInput){
+      handleDoneTodos(todo)
+    }
+   else{
+    removeTodo(todo.id)
+   }
   };
 
   const handleClickOutside = (event) => {
